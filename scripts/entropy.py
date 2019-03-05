@@ -1,4 +1,5 @@
 from math import log
+import numpy as np
 
 def ent(p):
 	if p == 0 or p==1:
@@ -7,53 +8,37 @@ def ent(p):
 		p2 = 1 - p
 		return -p*log(p, 2) - p2*log(p2, 2)
 
-def entg(start, a1, p1, a2, p2):
-    return ent(start) - (a1* ent(p1) + a2* ent(p2))
+def ent2(n, start_num, a, b):
+	start = start_num / n
+	aa, pp = a / n, b / a
+	pp2 = np.array([ent(p) for p in pp])
+	return ent(start) - aa.dot(pp2)
 
+
+
+# For all
+n = 14.0
+start_num = 9.0
 
 # Wind
-n = 14.0
-start_num = 9
-a11, a22 = 8, 6
-b11, b22 = 6, 3
-start = start_num/n
-a1 = a11/n
-a2 = a22/n
-p1 = b11/a11
-p2 = b22/a22
-print(entg(start, a1, p1, a2, p2))
+a = np.array([8.0, 6.0])
+b = np.array([6.0, 3.0])
+print 'wind', ent2(n, start_num, a,b)
+
 
 # Humidity
-a11, a22 = 7, 7
-b11, b22 = 3, 6
-a1 = a11/n
-a2 = a22/n
-p1 = b11/a11
-p2 = b22/a22
-print(entg(start, a1, p1, a2, p2))
+a = np.array([7.0, 7.0])
+b = np.array([3.0, 6.0])
+print 'humidity', ent2(n, start_num, a,b)
 
 
 # Temp
-a11, a22, a33 = 4, 6, 4
-b11, b22, b33 = 2, 4, 3
-a1 = a11/n
-a2 = a22/n
-a3 = a33/n
-p1 = b11/a11
-p2 = b22/a22
-p3 = b33/a33
-print(ent(start) - (a1* ent(p1) + a2* ent(p2) + a3*ent(p3)))
+a = np.array([4.0, 6.0, 4.0])
+b = np.array([2.0, 4.0, 3.0])
+print 'temp', ent2(n, start_num, a,b)
 
 
 # Outlook
-
-a11, a22, a33 = 5, 4, 5
-b11, b22, b33 = 2, 4, 3
-a1 = a11/n
-a2 = a22/n
-a3 = a33/n
-p1 = b11/a11
-p2 = b22/a22
-p3 = b33/a33
-print(ent(start) - (a1* ent(p1) + a2*ent(p2) + a3*ent(p3)))
-
+a = np.array([5.0, 4.0, 5.0])
+b = np.array([2.0, 4.0, 3.0])
+print 'outlook', ent2(n, start_num, a,b)
