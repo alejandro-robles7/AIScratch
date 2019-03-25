@@ -10,6 +10,7 @@ def calc(df, colname, attribute, target=1, targetcol= 'Play'):
 
 
 
+
 dat = dict()
 
 prob_yes = sum(df.Play == 1) * 1.0 /len(df)
