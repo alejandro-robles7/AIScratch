@@ -2,14 +2,6 @@ from pandas import read_csv, get_dummies
 from math import log
 
 
-
-target_col = 'Play'
-exclude_col = 'Day'
-df = read_csv('data/playtennis.csv')
-
-df = df.drop(exclude_col, axis=1)
-features_cols = df.columns[df.columns != target_col]
-
 def entropy(p):
     if p == 0 or p == 1:
         return 0
@@ -65,43 +57,48 @@ def get_best_attribute(data, exclude=None):
         print('Best Attribute:', best_attribute)
     return best_attribute, gain_dict
 
-first_layer_best_attribute , first_layer_gain_dict = get_best_attribute(df)
-second_layer =  df[first_layer_best_attribute].unique()
-second_layer_dict = {}
-
-for attribute in second_layer:
-    data = df[df[first_layer_best_attribute] == attribute]
-    try:
-        best_attribute, gain_dict = get_best_attribute(data, first_layer_best_attribute)
-        second_layer_dict[attribute] = {'best': best_attribute, 'dict': gain_dict}
-    except:
-        print(attribute, 'did not work')
 
 
-#data = df[df[first_layer_best_attribute] == 'Sunny']
+if __name__ == '__main__':
+    target_col = 'Play'
+    exclude_col = 'Day'
+    df = read_csv('../data/playtennis.csv').drop(exclude_col, axis=1)
+    features_cols = df.columns[df.columns != target_col]
 
-# Mild
-col = 'Temperature'
-data = df[df[col] == 'Mild']
-data2 = data[data['Humidity'] == 'Normal']
-#data3 = data2[data2['Outlook'] == 'Rain']
-#data3 = data2[data2['Outlook'] == 'Overcast']
-data3 = data2[data2['Outlook'] == 'Sunny']
+    first_layer_best_attribute, first_layer_gain_dict = get_best_attribute(df)
+    second_layer = df[first_layer_best_attribute].unique()
+    second_layer_dict = {}
 
+    for attribute in second_layer:
+        data = df[df[first_layer_best_attribute] == attribute]
+        try:
+            best_attribute, gain_dict = get_best_attribute(data, first_layer_best_attribute)
+            second_layer_dict[attribute] = {'best': best_attribute, 'dict': gain_dict}
+        except:
+            print(attribute, 'did not work')
 
-# Hot
-col = 'Temperature'
-data = df[df[col] == 'Hot']
-data2 = data[data['Humidity'] == 'High']
-#data3 = data2[data2['Outlook'] == 'Rain']
-#data3 = data2[data2['Outlook'] == 'Overcast']
-data3 = data2[data2['Outlook'] == 'Sunny']
+    # data = df[df[first_layer_best_attribute] == 'Sunny']
 
+    # Mild
+    col = 'Temperature'
+    data = df[df[col] == 'Mild']
+    data2 = data[data['Humidity'] == 'Normal']
+    # data3 = data2[data2['Outlook'] == 'Rain']
+    # data3 = data2[data2['Outlook'] == 'Overcast']
+    data3 = data2[data2['Outlook'] == 'Sunny']
 
-# Cool
-col = 'Temperature'
-data = df[df[col] == 'Cool']
-data2 = data[data['Outlook'] == 'Rain']
-#data3 = data2[data2['Outlook'] == 'Rain']
-#data3 = data2[data2['Outlook'] == 'Overcast']
-#data3 = data2[data2['Outlook'] == 'Sunny']
+    # Hot
+    col = 'Temperature'
+    data = df[df[col] == 'Hot']
+    data2 = data[data['Humidity'] == 'High']
+    # data3 = data2[data2['Outlook'] == 'Rain']
+    # data3 = data2[data2['Outlook'] == 'Overcast']
+    data3 = data2[data2['Outlook'] == 'Sunny']
+
+    # Cool
+    col = 'Temperature'
+    data = df[df[col] == 'Cool']
+    data2 = data[data['Outlook'] == 'Rain']
+    # data3 = data2[data2['Outlook'] == 'Rain']
+    # data3 = data2[data2['Outlook'] == 'Overcast']
+    # data3 = data2[data2['Outlook'] == 'Sunny']
